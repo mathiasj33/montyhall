@@ -20,7 +20,7 @@ with app.app_context():
     db.create_all()
 
 
-@app.get('/random/numbers')
+@app.get('/api/v1/random/numbers')
 def get_random_numbers():
     query = db.select(RandomNumber.number, db.func.count()).where(RandomNumber.guessed == False).group_by(
         RandomNumber.number)
@@ -29,21 +29,21 @@ def get_random_numbers():
     return jsonify(results)
 
 
-@app.post('/random/numbers')
+@app.post('/api/v1/random/numbers')
 def add_random_number():
     db.session.add(RandomNumber(number=random.randint(1, 10), guessed=False))
     db.session.commit()
     return ''
 
 
-@app.get('/random/streak')
+@app.get('/api/v1/random/streak')
 def get_streak():
     result = db.session.execute(db.select(Streak.length))
     result = list(result)[0][0]
     return jsonify(result)
 
 
-@app.post('/random/streak')
+@app.post('/api/v1/random/streak')
 def set_streak():
     new_streak = request.get_json()
     result = db.session.execute(db.select(Streak.length))
@@ -55,7 +55,7 @@ def set_streak():
     return ''
 
 
-@app.get('/monty/stats')
+@app.get('/api/v1/monty/stats')
 def get_monty_stats():
     query = db.Select(PlayedGame.switched, PlayedGame.won, db.func.count()) \
         .group_by(PlayedGame.switched, PlayedGame.won)
@@ -72,7 +72,7 @@ def get_monty_stats():
     })
 
 
-@app.post('/monty/games')
+@app.post('/api/v1/monty/games')
 def add_game():
     game = request.get_json()
     db.session.add(PlayedGame(switched=game['switched'], won=game['won']))

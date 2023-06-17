@@ -1,4 +1,4 @@
-import * as restClient from './restClient.js';
+import * as api from './restClient.js';
 import {BarChart} from "./chart.js";
 
 google.charts.load('current', {packages: ['bar']});
@@ -7,16 +7,15 @@ google.charts.setOnLoadCallback(onLibraryLoaded);
 const guessChart = new BarChart('guess-chart');
 const randomChart = new BarChart('random-chart');
 
-function onLibraryLoaded() {
-    updateCharts();
-    updateStreak();
+async function onLibraryLoaded() {
+    await Promise.all([updateCharts(), updateStreak()])
     setInterval(updateCharts, 1000);
     setInterval(updateStreak, 1000);
 }
 
 function augmentMissingKeys(data) {
     const newData = structuredClone(data);
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 6; i++) {
         if (!(i in data)) {
             newData[i] = 0;
         }
@@ -25,7 +24,7 @@ function augmentMissingKeys(data) {
 }
 
 async function updateCharts() {
-    let [guesses, randoms] = await Promise.all([restClient.getRandomNumbers(), restClient.getRandomNumbers()]);
+    let [guesses, randoms] = await Promise.all([api.getRandomNumbers(), api.getRandomNumbers()]);
     guesses = augmentMissingKeys(guesses);
     randoms = augmentMissingKeys(randoms);
     guessChart.draw(guesses);
@@ -33,8 +32,7 @@ async function updateCharts() {
 }
 
 async function updateStreak() {
-    // restClient.postStreak(4);
-    const streak = await restClient.getStreak();
+    const streak = await api.getStreak();
     document.getElementById('streak').textContent = streak;
     const power = 2 ** streak;
     const prob = 1 / power;

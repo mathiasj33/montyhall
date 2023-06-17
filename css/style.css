@@ -13,3 +13,15 @@
 #streak, #streak-length, #streak-percent {
     font-weight: bold;
 }
+
+.text-right {
+    text-align: right;
+}
+
+#streak-input {
+    max-width: 80px;
+}
+
+.alert {
+    max-width: 300px;
+}

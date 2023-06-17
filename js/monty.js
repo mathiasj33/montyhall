@@ -1,6 +1,5 @@
-import * as restClient from './restClient.js';
+import * as api from './restClient.js';
 import {BarChart} from "./chart.js";
-import {addGame} from "./restClient.js";
 
 google.charts.load('current', {packages: ['bar']});
 google.charts.setOnLoadCallback(onLibraryLoaded);
@@ -13,7 +12,7 @@ function onLibraryLoaded() {
 }
 
 async function updateChart() {
-    const stats = await restClient.getMontyStats();
+    const stats = await api.getMontyStats();
     chart.draw({
         'Fraction of stick wins': stats.stick_ratio,
         'Fraction of switch wins': stats.switch_ratio
