@@ -1,0 +1,15 @@
+.chart-container {
+    width: 47%;
+}
+
+.chart {
+    min-height: 400px;
+}
+
+.big {
+    font-size: 16pt;
+}
+
+#streak, #streak-length, #streak-percent {
+    font-weight: bold;
+}
