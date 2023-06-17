@@ -1,7 +1,7 @@
+import random
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import random
-from sqlalchemy import text
 
 from server.database import db
 
@@ -22,7 +22,8 @@ with app.app_context():
 
 @app.get('/random/numbers')
 def get_random_numbers():
-    query = db.select(RandomNumber.number, db.func.count()).where(RandomNumber.guessed == False).group_by(RandomNumber.number)
+    query = db.select(RandomNumber.number, db.func.count()).where(RandomNumber.guessed == False).group_by(
+        RandomNumber.number)
     results = db.session.execute(query)
     results = {row[0]: row[1] for row in results}
     return jsonify(results)
@@ -56,19 +57,20 @@ def set_streak():
 
 @app.get('/monty/stats')
 def get_monty_stats():
-    query = 'WITH total_stick AS (SELECT COUNT(*) c FROM played_game g WHERE g.switched = 0),'\
-            'total_switch AS (SELECT COUNT(*) c FROM played_game g WHERE g.switched = 1),'\
-            'stick_won AS (SELECT COUNT(*) c FROM played_game g WHERE g.switched = 0 AND g.won = 1),'\
-            'switch_won AS (SELECT COUNT(*) c FROM played_game g WHERE g.switched = 1 AND g.won = 1)'\
-            'SELECT (stick_won.c * 1.0) / total_stick.c AS stick_ratio,' \
-                   '(switch_won.c * 1.0) / total_switch.c AS switch_ratio '\
-            'FROM stick_won, total_stick, switch_won, total_switch'
-    results = db.session.execute(text(query))
-    tup = list(results)[0]
+    query = db.Select(PlayedGame.switched, PlayedGame.won, db.func.count()) \
+        .group_by(PlayedGame.switched, PlayedGame.won)
+    results = db.session.execute(query)
+    results = [r for r in results]
+    filter_results = lambda switched, won: [r[2] for r in results if r[0] == switched and r[1] == won][0]
+    stick_won = filter_results(False, True)
+    stick_lost = filter_results(False, False)
+    switch_won = filter_results(True, True)
+    switch_lost = filter_results(True, False)
     return jsonify({
-        'stick_ratio': tup[0],
-        'switch_ratio': tup[1]
+        'stick_ratio': stick_won / (stick_won + stick_lost),
+        'switch_ratio': switch_won / (switch_won + switch_lost)
     })
+
 
 @app.post('/monty/games')
 def add_game():
