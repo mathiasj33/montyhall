@@ -97,11 +97,6 @@ def get_monty_stats():
         .group_by(PlayedGame.switched, PlayedGame.won)
     results = db.session.execute(query)
     results = [r for r in results]
-    if len(results) == 0:
-        return jsonify({
-            'stick_ratio': 0,
-            'switch_ratio': 0
-        })
 
     def filter_results(switched, won):
         num = [r[2] for r in results if r[0] == switched and r[1] == won]
