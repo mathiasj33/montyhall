@@ -17,8 +17,8 @@ from models.streak import Streak
 
 with app.app_context():
     # db.drop_all()
-    # db.session.add(Streak(length=1))
-    # db.session.commit()
+    db.session.add(Streak(length=1))
+    db.session.commit()
     db.create_all()
 
 
