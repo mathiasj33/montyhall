@@ -18,19 +18,27 @@ async function post(body, endpoint) {
     return response.ok;
 }
 
-export async function getRandomNumbers() {
-    return get('random/numbers');
+export async function getDiceRolls() {
+    return get('random/dice_rolls');
 }
 
-export async function addRandomNumber() {
-    return post({}, 'random/numbers');
+export async function addDiceRoll(roll) {
+    return post(roll, 'random/dice_rolls');
+}
+
+export async function getRandomGuesses() {
+    return get('random/guesses');
+}
+
+export async function addRandomGuess(guess) {
+    return post(guess, 'random/guesses');
 }
 
 export async function getStreak() {
     return get('random/streak');
 }
 
-export async function postStreak(streak) {
+export async function setStreak(streak) {
     return post(streak, 'random/streak');
 }
 

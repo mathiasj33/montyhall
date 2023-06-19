@@ -23,28 +23,3 @@ export class BarChart {
         this.chart.draw(dataTable, google.charts.Bar.convertOptions(options));
     }
 }
-
-export class LineChart {
-    constructor(id) {
-        this.id = id;
-        this.chart = null;
-        this.data = null;
-    }
-
-    draw(data) {
-        const dataTable = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030, null]
-        ]);
-
-        const options = {
-            legend: {position: 'bottom'},
-            curveType: 'function',
-        };
-        this.chart = this.chart ? this.chart : new google.charts.Line(document.getElementById(this.id));
-        this.chart.draw(dataTable, google.charts.Line.convertOptions(options));
-    }
-}

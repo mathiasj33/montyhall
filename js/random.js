@@ -24,7 +24,7 @@ function augmentMissingKeys(data) {
 }
 
 async function updateCharts() {
-    let [guesses, randoms] = await Promise.all([api.getRandomNumbers(), api.getRandomNumbers()]);
+    let [guesses, randoms] = await Promise.all([api.getRandomGuesses(), api.getDiceRolls()]);
     guesses = augmentMissingKeys(guesses);
     randoms = augmentMissingKeys(randoms);
     guessChart.draw(guesses);
@@ -37,5 +37,5 @@ async function updateStreak() {
     const power = 2 ** streak;
     const prob = 1 / power;
     document.getElementById('streak-length').textContent = power;
-    document.getElementById('streak-percent').textContent = `${Number(prob * 100).toFixed(2)}%`;
+    document.getElementById('streak-percent').textContent = `${Number(prob * 100).toPrecision(2)}%`;
 }

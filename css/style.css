@@ -25,3 +25,12 @@
 .alert {
     max-width: 300px;
 }
+
+.hidden {
+    opacity: 0;
+}
+
+.dice .btn {
+    flex: none;
+    border-radius: 0;
+}
