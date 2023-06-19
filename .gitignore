@@ -1,5 +1,4 @@
 .idea
-lib
 __pycache__
 server/instance
 virtualenv
