@@ -48,19 +48,19 @@ def get_numbers(guessed):
     return results
 
 
-@app.get('/api/v1/random/dice_rolls')
+@app.get('/v1/random/dice_rolls')
 def get_dice_rolls():
     dice_rolls = get_numbers(False)
     return jsonify(dice_rolls)
 
 
-@app.get('/api/v1/random/guesses')
+@app.get('/v1/random/guesses')
 def get_random_guesses():
     guesses = get_numbers(True)
     return jsonify(guesses)
 
 
-@app.post('/api/v1/random/dice_rolls')
+@app.post('/v1/random/dice_rolls')
 def add_dice_roll():
     roll = request.get_json()
     db.session.add(RandomNumber(number=roll, guessed=False))
@@ -68,7 +68,7 @@ def add_dice_roll():
     return ''
 
 
-@app.post('/api/v1/random/guesses')
+@app.post('/v1/random/guesses')
 def add_random_guess():
     guess = request.get_json()
     db.session.add(RandomNumber(number=guess, guessed=True))
@@ -76,14 +76,14 @@ def add_random_guess():
     return ''
 
 
-@app.get('/api/v1/random/streak')
+@app.get('/v1/random/streak')
 def get_streak():
     result = db.session.execute(db.select(Streak.length))
     result = list(result)[0][0]
     return jsonify(result)
 
 
-@app.post('/api/v1/random/streak')
+@app.post('/v1/random/streak')
 def set_streak():
     new_streak = request.get_json()
     db.session.execute(db.update(Streak).values(length=new_streak))
@@ -91,7 +91,7 @@ def set_streak():
     return ''
 
 
-@app.get('/api/v1/monty/stats')
+@app.get('/v1/monty/stats')
 def get_monty_stats():
     query = db.Select(PlayedGame.switched, PlayedGame.won, db.func.count()) \
         .group_by(PlayedGame.switched, PlayedGame.won)
@@ -114,7 +114,7 @@ def get_monty_stats():
     })
 
 
-@app.post('/api/v1/monty/games')
+@app.post('/v1/monty/games')
 def add_game():
     game = request.get_json()
     db.session.add(PlayedGame(switched=game['switched'], won=game['won']))
