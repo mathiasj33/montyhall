@@ -2,10 +2,14 @@ import os
 
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from server.database import db
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
 # CORS(app, resources={r'/*': {'origins': 'http://localhost:63342'}})
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///montyhall.db'
@@ -16,10 +20,9 @@ from models.played_game import PlayedGame
 from models.streak import Streak
 
 with app.app_context():
-    # db.drop_all()
+    db.create_all()
     db.session.add(Streak(length=1))
     db.session.commit()
-    db.create_all()
 
 
 @app.before_request
