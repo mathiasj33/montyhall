@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.wsgi_app = ProxyFix(
     app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 )
-CORS(app, resources={r'/*': {'origins': 'http://montyhall.mathias-jackermeier.me'}})
+CORS(app, resources={r'/*': {'origins': 'https://montyhall.mathias-jackermeier.me'}})
 # CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///montyhall.db'
 db.init_app(app)
