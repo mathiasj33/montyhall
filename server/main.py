@@ -15,9 +15,9 @@ CORS(app, resources={r'/*': {'origins': 'https://montyhall.mathias-jackermeier.m
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///montyhall.db'
 db.init_app(app)
 
-from models.random_number import RandomNumber
-from models.played_game import PlayedGame
-from models.streak import Streak
+from server.models.random_number import RandomNumber
+from server.models.played_game import PlayedGame
+from server.models.streak import Streak
 
 with app.app_context():
     db.create_all()
