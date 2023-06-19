@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.wsgi_app = ProxyFix(
     app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 )
-# CORS(app, resources={r'/*': {'origins': 'http://localhost:63342'}})
-CORS(app)
+CORS(app, resources={r'/*': {'origins': 'http://montyhall.mathias-jackermeier.me'}})
+# CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///montyhall.db'
 db.init_app(app)
 
@@ -36,7 +36,7 @@ def authorize():
         abort(401)
 
 
-@app.post('/api/v1/login')
+@app.post('/v1/login')
 def login():
     password = request.get_json()
     if password != os.environ['MH_PASSWORD']:
