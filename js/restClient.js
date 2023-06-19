@@ -6,16 +6,24 @@ async function get(endpoint) {
 }
 
 async function post(body, endpoint) {
-    const response = await fetch(`${SERVER_URL}/${endpoint}`, {
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    };
+    const api_key = localStorage.getItem('API_KEY')
+    if (api_key !== null) {
+        headers['Authorization'] = `Bearer ${api_key}`
+    }
+    return fetch(`${SERVER_URL}/${endpoint}`, {
         method: 'POST',
         mode: 'cors',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify(body)
     });
-    return response.ok;
+}
+
+export async function login(password) {
+    return post(password, 'login');
 }
 
 export async function getDiceRolls() {

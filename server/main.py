@@ -1,6 +1,6 @@
-import random
+import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 
 from server.database import db
@@ -21,6 +21,24 @@ with app.app_context():
     # db.session.commit()
     db.create_all()
 
+
+@app.before_request
+def authorize():
+    if request.method in ['GET', 'OPTIONS'] or request.endpoint == 'login':
+        return
+    auth_header = request.headers.get('Authorization')
+    try:
+        assert auth_header.split(' ')[1] == os.environ['MH_API_KEY']
+    except:
+        abort(401)
+
+
+@app.post('/api/v1/login')
+def login():
+    password = request.get_json()
+    if password != os.environ['MH_PASSWORD']:
+        abort(401)
+    return jsonify(os.environ['MH_API_KEY'])
 
 def get_numbers(guessed):
     query = db.select(RandomNumber.number, db.func.count()).where(RandomNumber.guessed == guessed).group_by(
