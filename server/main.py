@@ -6,12 +6,16 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from server.database import db
 
+production_server = bool(int(os.environ['MH_PRODUCTION']))
+
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(
     app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 )
-CORS(app, resources={r'/*': {'origins': 'https://montyhall.mathias-jackermeier.me'}})
-# CORS(app)
+if production_server:
+    CORS(app, resources={r'/*': {'origins': 'https://montyhall.mathias-jackermeier.me'}})
+else:
+    CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///montyhall.db'
 db.init_app(app)
 
@@ -42,6 +46,7 @@ def login():
     if password != os.environ['MH_PASSWORD']:
         abort(401)
     return jsonify(os.environ['MH_API_KEY'])
+
 
 def get_numbers(guessed):
     query = db.select(RandomNumber.number, db.func.count()).where(RandomNumber.guessed == guessed).group_by(
