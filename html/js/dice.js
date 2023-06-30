@@ -4,12 +4,11 @@ import {BarChart} from "./chart.js";
 google.charts.load('current', {packages: ['bar']});
 google.charts.setOnLoadCallback(onLibraryLoaded);
 
-const guessChart = new BarChart('guess-chart');
-const randomChart = new BarChart('random-chart');
+const chart = new BarChart('bar-chart');
 
 async function onLibraryLoaded() {
-    await Promise.all([updateCharts(), updateStreak()])
-    setInterval(updateCharts, 1000);
+    await Promise.all([updateChart(), updateStreak()])
+    setInterval(updateChart, 1000);
     setInterval(updateStreak, 1000);
 }
 
@@ -23,12 +22,10 @@ function augmentMissingKeys(data) {
     return newData;
 }
 
-async function updateCharts() {
-    let [guesses, randoms] = await Promise.all([api.getRandomGuesses(), api.getDiceRolls()]);
-    guesses = augmentMissingKeys(guesses);
-    randoms = augmentMissingKeys(randoms);
-    guessChart.draw(guesses);
-    randomChart.draw(randoms);
+async function updateChart() {
+    let rolls = await api.getDiceRolls();
+    rolls = augmentMissingKeys(rolls);
+    chart.draw(rolls);
 }
 
 async function updateStreak() {

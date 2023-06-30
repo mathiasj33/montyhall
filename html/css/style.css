@@ -34,3 +34,20 @@
     flex: none;
     border-radius: 0;
 }
+
+.mt-10 {
+    margin-top: 100px;
+}
+
+.gap-10 {
+    gap: 100px;
+}
+
+.mt-10 {
+    margin-top: 100px;
+}
+
+#random-guess-btns button {
+    min-width: 50px;
+    min-height: 50px;
+}
