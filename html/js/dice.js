@@ -36,3 +36,13 @@ async function updateStreak() {
     document.getElementById('streak-length').textContent = power;
     document.getElementById('streak-percent').textContent = `${Number(prob * 100).toPrecision(2)}%`;
 }
+
+document.onkeydown = function(e) {
+    e = e || window.event;
+    if(e.code === 'ArrowRight') {
+        window.location.replace('random_guesses.html');
+    }
+    else if(e.code === 'ArrowLeft') {
+        window.location.replace('monty.html');
+    }
+}

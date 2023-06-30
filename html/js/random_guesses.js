@@ -26,3 +26,10 @@ async function updateChart() {
     guesses = augmentMissingKeys(guesses);
     chart.draw(guesses);
 }
+
+document.onkeydown = function(e) {
+    e = e || window.event;
+    if(e.code === 'ArrowLeft') {
+        window.location.replace('dice.html');
+    }
+}

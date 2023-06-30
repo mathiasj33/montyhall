@@ -18,3 +18,10 @@ async function updateChart() {
         'Fraction of switch wins': stats.switch_ratio
     });
 }
+
+document.onkeydown = function(e) {
+    e = e || window.event;
+    if(e.code === 'ArrowRight') {
+        window.location.replace('dice.html');
+    }
+}
