@@ -47,7 +47,7 @@
     margin-top: 100px;
 }
 
-#random-guess-btns button {
+.dice button {
     min-width: 50px;
     min-height: 50px;
 }
